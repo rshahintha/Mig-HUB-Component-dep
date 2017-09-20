@@ -42,7 +42,7 @@ public class ApiInvocationHandler extends AbstractHandler {
     private static final String USERINFO_ENDPOINT = "oauth2/userinfo";
     private static final String AUTH_HEADER = "Authorization";
     private static final String TEMP_AUTH_HEADER = "tempAuthVal";
-    private static final String TOKEN_TYPE = "Bearer";
+    private static final String TOKEN_TYPE = "Bearer ";
 
     @Override
     public boolean handleRequest(MessageContext messageContext) {
