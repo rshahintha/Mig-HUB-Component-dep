@@ -14,6 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 package com.wso2telco.dep.apihandler.util;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,8 +42,7 @@ public class APIManagerDBUtil {
 
         try {
             con = DbUtils.getDbConnection(DataSourceNames.WSO2AM_DB);
-            StringBuilder queryString = new StringBuilder(
-                    "SELECT cp.CONSUMER_SECRET,it.ACCESS_TOKEN , it.REFRESH_TOKEN , it.VALIDITY_PERIOD  ");
+            StringBuilder queryString = new StringBuilder("SELECT it.ACCESS_TOKEN ");
             queryString.append("FROM idn_oauth_consumer_apps cp ");
             queryString.append("inner join idn_oauth2_access_token it ");
             queryString.append("on it.CONSUMER_KEY_ID = cp.ID ");
@@ -55,10 +55,7 @@ public class APIManagerDBUtil {
             log.debug("sql query in APIManagerDBUtil : " + ps);
             rs = ps.executeQuery();
             rs.next();
-            tokenDto.setTokenAuth(consumerKey + ":" + rs.getString(1));
-            tokenDto.setAccessToken(rs.getString(2));
-            tokenDto.setRefreshToken(rs.getString(3));
-            tokenDto.setTokenValidity(rs.getLong(4));
+            tokenDto.setAccessToken(rs.getString(1));
 
         } catch (SQLException e) {
             log.error("database operation error in APIManagerDBUtil : ", e);
@@ -69,36 +66,6 @@ public class APIManagerDBUtil {
             DbUtils.closeAllConnections(ps, con, rs);
         }
         return tokenDto;
-    }
-
-    public static String getAccessTokenForUserInfo(String accessToken) {
-
-        String response = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String sql = "SELECT it.ACCESS_TOKEN FROM idn_oauth2_access_token it INNER JOIN idn_oauth_consumer_apps cp "
-                + "on it.CONSUMER_KEY_ID = cp.ID where CONSUMER_KEY_ID="
-                + "(select CONSUMER_KEY_ID from idn_oauth2_access_token"
-                + " where ACCESS_TOKEN=?) AND it.AUTHZ_USER= cp.USERNAME;";
-        try {
-
-            con = DbUtils.getDbConnection(DataSourceNames.WSO2AM_DB);
-            ps = con.prepareStatement(sql);
-            ps.setString(1, accessToken);
-            log.debug("sql query in APIManagerDBUtil : " + ps);
-            rs = ps.executeQuery();
-            rs.next();
-            response = rs.getString(1);
-
-        } catch (SQLException e) {
-            log.error("database operation error for getAccessTokenForUserInfo() in APIManagerDBUtil : ", e);
-        } catch (Exception e) {
-            log.error("error in APIManagerDBUtil : ", e);
-        } finally {
-            DbUtils.closeAllConnections(ps, con, rs);
-        }
-        return response;
     }
 
 }
