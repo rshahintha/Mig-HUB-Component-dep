@@ -40,9 +40,9 @@ public class ApiInvocationHandler extends AbstractHandler {
     private static final Log log = LogFactory.getLog(ApiInvocationHandler.class);
     public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String TOKEN_POOL_ENABLED = "enable_token_pool";
-    private static final String AUTH_ENDPOINT = "oauth2/authorize";
-    private static final String TOKEN_ENDPOINT = "oauth2/token";
-    private static final String USERINFO_ENDPOINT = "oauth2/userinfo";
+    private static final String AUTH_ENDPOINT = "authorize";
+    private static final String TOKEN_ENDPOINT = "token";
+    private static final String USERINFO_ENDPOINT = "userinfo";
     private static final String AUTH_HEADER = "Authorization";
     private static final String TEMP_AUTH_HEADER = "tempAuthVal";
     private static final String TOKEN_TYPE = "Bearer ";
